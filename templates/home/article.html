@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center">
+  <div class="col-6">
+    <h3>{{ article.title }}</h3>
+    <br>
+    {{ article.content }}
+    <hr>
+    by <strong>{{ article.author }}</strong>
+  </div>
+</div>
+{% endblock %}

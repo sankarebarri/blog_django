@@ -9,13 +9,13 @@ def registration(request):
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'{username} successfully created')
-            return redirect('home')
+            return redirect('login')
 
     else:
         form = UserCreationForm()
 
     context = {
-        'form': form,
+        'form': form
     }
 
     return render(request, 'users/registration.html', context)
