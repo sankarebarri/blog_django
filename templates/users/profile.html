@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
 {% block content %}
 <!--
 User Profile Sidebar by @keenthemes
@@ -27,6 +28,12 @@ Licensed under MIT
 					</div>
 				</div>
 			</div>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ u_profile|crispy }}
+        {{ u_image|crispy }}
+        <input type="submit" value="Update">
+      </form>
 		</div>
 		<div class="col-md-9">
         <div class="profile-content">
@@ -34,6 +41,7 @@ Licensed under MIT
           <hr>
 	           {{ user.profile.user_detail }}
         </div>
+        <a href="#">Edit User detail</a>
 		</div>
 	</div>
 </div>
