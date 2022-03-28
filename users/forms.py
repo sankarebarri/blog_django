@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profile
+from home.models import BlogDetails
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
@@ -24,3 +25,9 @@ class UpdateImageProfile(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['user_image']
+
+
+class NewPost(forms.ModelForm):
+    class Meta:
+        model = BlogDetails
+        fields = ['category', 'title', 'content', 'content_image']

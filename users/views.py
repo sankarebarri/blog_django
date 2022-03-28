@@ -1,8 +1,12 @@
+
 from django.shortcuts import render, redirect
-from .forms import UserRegisterForm, UpdateProfile, UpdateImageProfile
+from .forms import UserRegisterForm, UpdateProfile, UpdateImageProfile, NewPost
 from django.contrib import messages
 from .models import Profile
 from django.contrib.auth.decorators import login_required
+from home.models import BlogDetails
+from django.views.generic import CreateView
+
 
 def registration(request):
     if request.method == 'POST':
@@ -21,6 +25,7 @@ def registration(request):
     }
 
     return render(request, 'users/registration.html', context)
+
 
 @login_required
 def profile(request):
@@ -41,3 +46,26 @@ def profile(request):
     }
 
     return render(request, 'users/profile.html', context)
+
+
+class PostCreateView(CreateView):
+    model = BlogDetails
+    template_name = 'users/new_post.html'
+    fields = ['category', 'title', 'content', 'content_image']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+# def new_post(request):
+#     if request.method == 'POST':
+#         new_post = NewPost(request.POST, request.FILES)
+#         if new_post.is_valid():
+#             new_post.save()
+#             return redirect('home')
+#     else:
+#         new_post = NewPost()
+#
+#     context = {
+#         'new_post': new_post,
+#     }
+#     return render(request, 'users/new_post.html', context)
