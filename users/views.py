@@ -5,8 +5,8 @@ from django.contrib import messages
 from .models import Profile
 from django.contrib.auth.decorators import login_required
 from home.models import BlogDetails
-from django.views.generic import CreateView
-
+from django.views.generic import CreateView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 def registration(request):
     if request.method == 'POST':
@@ -48,7 +48,7 @@ def profile(request):
     return render(request, 'users/profile.html', context)
 
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     model = BlogDetails
     template_name = 'users/new_post.html'
     fields = ['category', 'title', 'content', 'content_image']
@@ -56,6 +56,7 @@ class PostCreateView(CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
 # def new_post(request):
 #     if request.method == 'POST':
 #         new_post = NewPost(request.POST, request.FILES)
@@ -69,3 +70,17 @@ class PostCreateView(CreateView):
 #         'new_post': new_post,
 #     }
 #     return render(request, 'users/new_post.html', context)
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = BlogDetails
+    template_name = 'users/new_post.html'
+    fields = ['title', 'content', 'content_image']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
